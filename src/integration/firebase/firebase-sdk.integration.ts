@@ -5,9 +5,11 @@ import {
   SnapshotOptions,
   addDoc,
   collection,
+  doc,
   getDocs,
   getFirestore,
   query,
+  setDoc,
   where,
 } from "firebase/firestore";
 import { v4 as generateUuidv4 } from "uuid";
@@ -211,16 +213,16 @@ export const existsByEmail = async (email: string): Promise<boolean> => {
 };
 
 export const createUser = async (email: string): Promise<void> => {
-  // console.log(email);
-  // const user = new User(email);
-  // const doesExistByEmail = await existsByEmail(user.email);
-  // if (doesExistByEmail) {
-  //   console.log("User already exists");
-  //   return;
-  // }
-  // const documentReference = doc(database, databaseName, user.id).withConverter(userConverter);
-  // console.log("Going to setDoc");
-  // await setDoc(documentReference, user);
+  console.log(email);
+  const user = new User(email);
+  const doesExistByEmail = await existsByEmail(user.email);
+  if (doesExistByEmail) {
+    console.log("User already exists");
+    return;
+  }
+  const documentReference = doc(database, databaseName, user.id).withConverter(userConverter);
+  console.log("Going to setDoc");
+  await setDoc(documentReference, user);
 };
 
 // createUser("me+1@eugeniomoreira.com");
