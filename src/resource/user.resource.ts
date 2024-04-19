@@ -4,7 +4,7 @@ import { User } from "../model/user.model";
 import * as userRepository from "../repository/user.repository";
 import { ErrorResponse } from "./response/error.response";
 
-export const register = async (request: Request, response: Response) => {
+export const register = async (request: Request, response: Response): Promise<Response> => {
   try {
     const { email, password } = request.body;
     if (!email || !password) {
