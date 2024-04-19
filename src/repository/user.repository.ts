@@ -11,7 +11,10 @@ export const create = async (newUser: User): Promise<void> => {
   console.log(newUser);
   const hashedPassword = await hashPassword(newUser.password);
   const user = User.withHashedPassword(newUser, hashedPassword);
-  await firebase.createUser(user.email);
+  await firebase.createUser(user.email).then(() => {
+    console.log("User created");
+  });
+  console.log("user.repository.ts#create finished");
 };
 
 const hashPassword = async (password: string): Promise<string> => {

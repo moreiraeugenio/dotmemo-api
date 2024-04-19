@@ -223,6 +223,7 @@ export const createUser = async (email: string): Promise<void> => {
   const documentReference = doc(database, databaseName, user.id).withConverter(userConverter);
   console.log("Going to setDoc");
   await setDoc(documentReference, user);
+  console.log("Cheguei");
 };
 
 // createUser("me+1@eugeniomoreira.com");

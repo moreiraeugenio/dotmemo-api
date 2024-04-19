@@ -19,10 +19,16 @@ export const register = async (request: Request, response: Response) => {
       const errorResponse = ErrorResponse.ofEmailAlreadyRegistered(request.path);
       return response.status(errorResponse.status).json(errorResponse);
     }
-    await userRepository.create(User.withEmailAndPassword(email, password)).catch(() => {
-      console.log("Error while creating user");
-    });
-    return response.status(StatusCodes.CREATED);
+    await userRepository
+      .create(User.withEmailAndPassword(email, password))
+      .then(() => {
+        console.log("then do create");
+      })
+      .catch(() => {
+        console.log("Error while creating user");
+      });
+    console.log("antes da response de sucesso");
+    return response.status(StatusCodes.CREATED).end();
   } catch (error) {
     return response.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ error });
   }
