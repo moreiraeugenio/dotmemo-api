@@ -1,2 +1,5 @@
+.env
 build
 node_modules
+service-account-key.json
+TODO.md

@@ -1,6 +1,5 @@
-# dotmemo -> server
+# dotmemo-api
 
 ## To do
 
-- Format with `npx prettier . --write`
 - Use `npx prettier . --check` in CI
