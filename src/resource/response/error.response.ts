@@ -1,11 +1,11 @@
 import { StatusCodes } from "http-status-codes";
 
-export class ErrorResponse {
-  timestamp: string = new Date().toISOString();
-  status: number;
-  error: string;
-  message: string;
-  path: string;
+export default class ErrorResponse {
+  readonly timestamp: string = new Date().toISOString();
+  readonly status: number;
+  readonly error: string;
+  readonly message: string;
+  readonly path: string;
 
   constructor(status: number, message: string, path: string) {
     this.status = status;

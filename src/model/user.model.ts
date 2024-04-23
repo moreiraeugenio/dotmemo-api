@@ -1,21 +1,34 @@
 import { v4 as generateUuidv4 } from "uuid";
+import { hashPassword } from "../util/password.util";
 
-export class User {
-  id: string;
-  email: string;
-  password: string;
+export default class User {
+  private constructor(
+    readonly id: string,
+    readonly email: string,
+    readonly password: string,
+    readonly isPartial: boolean,
+    readonly updatedAt: Date,
+    readonly createdAt: Date,
+  ) {}
 
-  private constructor(id: string, email: string, password: string) {
-    this.id = id;
-    this.email = email;
-    this.password = password;
+  static withEmailAndPassword(email: string, password: string): User {
+    const now = new Date();
+    return new User(generateUuidv4(), email, password, true, now, now);
   }
 
-  static withEmailAndPassword(email: string, password: string) {
-    return new User(generateUuidv4(), email, password);
+  copyAsPermanent(): User {
+    const now = new Date();
+    return new User(this.id, this.email, this.password, false, now, this.createdAt);
   }
 
-  static withHashedPassword(user: User, hashedPassword: string) {
-    return new User(user.id, user.email, hashedPassword);
+  async withHashedPassword(): Promise<User> {
+    return new User(
+      this.id,
+      this.email,
+      await hashPassword(this.password),
+      this.isPartial,
+      this.updatedAt,
+      this.createdAt,
+    );
   }
 }

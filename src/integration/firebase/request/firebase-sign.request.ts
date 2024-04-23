@@ -1,10 +1,10 @@
-export class FirebaseSignRequest {
-  private _email: string;
-  private _password: string;
-  private _returnSecureToken: boolean = true;
+export default class FirebaseSignRequest {
+  private readonly email;
+  private readonly password;
+  private readonly returnSecureToken: boolean = true;
 
-  constructor(email: string, password: string) {
-    this._email = email;
-    this._password = password;
+  constructor(email: string, textPlainPassword: string) {
+    this.email = email;
+    this.password = textPlainPassword;
   }
 }

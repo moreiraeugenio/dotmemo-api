@@ -1,3 +1,3 @@
-export enum HttpHeader {
-  CONTENT_TYPE = "Content-Type",
-}
+export const HttpHeader = {
+  CONTENT_TYPE: "Content-Type",
+};

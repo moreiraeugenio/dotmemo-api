@@ -1,7 +1,7 @@
-export class FirebaseSignResponse {
-  idToken: string;
-  refreshToken: string;
-  expiresIn: string;
+export default class FirebaseSignResponse {
+  readonly idToken: string;
+  readonly refreshToken: string;
+  readonly expiresIn: string;
 
   constructor(idToken: string, refreshToken: string, expiresIn: string) {
     this.idToken = idToken;

@@ -1,6 +1,17 @@
 import express from "express";
-import * as userResource from "../resource/user.resource";
+import { injectable } from "tsyringe";
+import UserResource from "../resource/user.resource";
+import Router from "./router";
 
-export const userRouter = express.Router();
+@injectable()
+export default class UserRouter implements Router {
+  constructor(private readonly userResource: UserResource) {}
 
-userRouter.post("/register", userResource.register);
+  get(): express.Router {
+    return express.Router().post("/register", this.userResource.register.bind(this.userResource));
+  }
+
+  path(): string {
+    return "/api/v1/users";
+  }
+}

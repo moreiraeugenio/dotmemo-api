@@ -1,11 +1,5 @@
 export interface HttpRequest {}
 
-/**
- * Converts an object to JSON, taking into account the `_` prefix of private properties.
- *
- * @param {HttpRequest} object - The object to convert to JSON.
- * @return {string} The JSON representation of the object.
- */
 export const toJson = (object: HttpRequest): string => {
   return JSON.stringify(
     Object.fromEntries(
