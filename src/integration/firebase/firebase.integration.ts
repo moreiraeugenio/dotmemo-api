@@ -26,7 +26,7 @@ export default class FirebaseIntegration {
     );
   }
 
-  async signUp(email: string, textPlainPassword: string): Promise<FirebaseSignResponse | null> {
+  async signUp(email: string, password: string): Promise<FirebaseSignResponse | null> {
     try {
       const url = `${this.restApiBaseUrl}/accounts:signUp?key=${this.apiKey}`;
       const response = await fetch(url, {
@@ -34,7 +34,7 @@ export default class FirebaseIntegration {
         headers: {
           [HttpHeader.CONTENT_TYPE]: MediaType.APPLICATION_JSON,
         },
-        body: toJson(new FirebaseSignRequest(email, textPlainPassword)),
+        body: toJson(new FirebaseSignRequest(email, password)),
       });
       const responseData = (await response.json()) as FirebaseSignResponse;
       return responseData;
@@ -44,7 +44,7 @@ export default class FirebaseIntegration {
     }
   }
 
-  async signIn(email: string, textPlainPassword: string): Promise<FirebaseSignResponse | null> {
+  async signIn(email: string, password: string): Promise<FirebaseSignResponse | null> {
     try {
       const url = `${this.restApiBaseUrl}/accounts:signInWithPassword?key=${this.apiKey}`;
       const response = await fetch(url, {
@@ -52,7 +52,7 @@ export default class FirebaseIntegration {
         headers: {
           [HttpHeader.CONTENT_TYPE]: MediaType.APPLICATION_JSON,
         },
-        body: toJson(new FirebaseSignRequest(email, textPlainPassword)),
+        body: toJson(new FirebaseSignRequest(email, password)),
       });
       const responseData = (await response.json()) as FirebaseSignResponse;
       return responseData;
