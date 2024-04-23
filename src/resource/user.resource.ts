@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { StatusCodes } from "http-status-codes";
 import { injectable } from "tsyringe";
+import { HttpStatus } from "../common/http-status.common";
 import User from "../model/user.model";
 import UserAlreadyExistsError from "../service/error/user-already-exists.error";
 import UserService from "../service/user.service";
@@ -18,7 +18,7 @@ export default class UserResource {
         return response.status(errorResponse.status).json(errorResponse);
       }
       await this.userService.register(await User.withEmailAndPassword(email, password));
-      return response.status(StatusCodes.CREATED).send();
+      return response.status(HttpStatus.CREATED).send();
     } catch (error) {
       if (error instanceof UserAlreadyExistsError) {
         const errorResponse = ErrorResponse.ofEmailAlreadyRegistered(request.path);

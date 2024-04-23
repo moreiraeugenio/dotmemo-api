@@ -19,6 +19,6 @@ export default class UserService {
     const userWithHashedPassword = await user.withHashedPassword();
     await this.userRepository.createPartial(userWithHashedPassword);
     await this.firebaseIntegration.signUp(user.email, user.password);
-    await this.userRepository.completeRegistration(await userWithHashedPassword.copyAsPermanent());
+    await this.userRepository.completeRegistration(user.id);
   }
 }

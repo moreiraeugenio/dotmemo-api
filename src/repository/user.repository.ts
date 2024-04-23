@@ -8,6 +8,7 @@ import {
   getDocs,
   query,
   setDoc,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { injectable } from "tsyringe";
@@ -63,13 +64,11 @@ export default class UserRepository {
     },
   };
 
-  async completeRegistration(user: User): Promise<void> {
-    const nonPartialUser = user.copyAsPermanent();
-    const documentReference = doc(
-      this.firestore,
-      this.databaseName,
-      nonPartialUser.id,
-    ).withConverter(this.userConverter);
-    await setDoc(documentReference, nonPartialUser);
+  async completeRegistration(userId: string): Promise<void> {
+    const documentReference = doc(this.firestore, this.databaseName, userId);
+    await updateDoc(documentReference, {
+      isPartial: false,
+      updatedAt: new Date(),
+    });
   }
 }
