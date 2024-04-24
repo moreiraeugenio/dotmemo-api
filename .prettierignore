@@ -1,5 +1,6 @@
 .env
 .env.example
 .gitignore
+.nvmrc
 .prettierignore
 build
