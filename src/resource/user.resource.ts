@@ -5,6 +5,7 @@ import User from "../model/user.model";
 import UserAlreadyExistsError from "../service/error/user-already-exists.error";
 import UserService from "../service/user.service";
 import ErrorResponse from "./response/error.response";
+import LoginResponse from "./response/login.response";
 
 @injectable()
 export default class UserResource {
@@ -24,6 +25,21 @@ export default class UserResource {
         const errorResponse = ErrorResponse.ofEmailAlreadyRegistered(request.path);
         return response.status(errorResponse.status).json(errorResponse);
       }
+      const errorResponse = ErrorResponse.fromError(error, request.path);
+      return response.status(errorResponse.status).json(errorResponse);
+    }
+  }
+
+  async login(request: Request, response: Response): Promise<Response> {
+    try {
+      const { email, password } = request.body;
+      if (!email || !password) {
+        const errorResponse = ErrorResponse.ofEmailAndPasswordAreRequired(request.path);
+        return response.status(errorResponse.status).json(errorResponse);
+      }
+      const idToken = await this.userService.login(email, password);
+      return response.status(HttpStatus.OK).json(new LoginResponse(idToken));
+    } catch (error) {
       const errorResponse = ErrorResponse.fromError(error, request.path);
       return response.status(errorResponse.status).json(errorResponse);
     }

@@ -21,4 +21,9 @@ export default class UserService {
     await this.firebaseIntegration.signUp(user.email, user.password);
     await this.userRepository.completeRegistration(user.id);
   }
+
+  async login(email: string, password: string): Promise<string> {
+    const response = await this.firebaseIntegration.signIn(email, password);
+    return response.idToken;
+  }
 }

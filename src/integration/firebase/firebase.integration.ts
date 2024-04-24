@@ -48,7 +48,7 @@ export default class FirebaseIntegration {
     }
   }
 
-  async signIn(email: string, password: string): Promise<FirebaseSignResponse | null> {
+  async signIn(email: string, password: string): Promise<FirebaseSignResponse> {
     try {
       const url = `${this.restApiBaseUrl}/accounts:signInWithPassword?key=${this.apiKey}`;
       const response = await fetch(url, {
@@ -58,11 +58,14 @@ export default class FirebaseIntegration {
         },
         body: toJson(new FirebaseSignRequest(email, password)),
       });
-      const responseData = (await response.json()) as FirebaseSignResponse;
-      return responseData;
+      if (response.status >= HttpStatus.OK && response.status <= HttpStatus.LAST_2XX) {
+        const responseData = (await response.json()) as FirebaseSignResponse;
+        return responseData;
+      }
+      throw await HttpError.fromResponse(response);
     } catch (error) {
       console.error("Error while signing in:", error);
-      return null;
+      throw error;
     }
   }
 

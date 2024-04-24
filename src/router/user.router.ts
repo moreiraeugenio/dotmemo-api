@@ -8,7 +8,10 @@ export default class UserRouter implements Router {
   constructor(private readonly userResource: UserResource) {}
 
   get(): express.Router {
-    return express.Router().post("/register", this.userResource.register.bind(this.userResource));
+    return express
+      .Router()
+      .post("/register", this.userResource.register.bind(this.userResource))
+      .post("/login", this.userResource.login.bind(this.userResource));
   }
 
   path(): string {
