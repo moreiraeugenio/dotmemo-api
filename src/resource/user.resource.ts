@@ -11,7 +11,7 @@ import LoginResponse from "./response/login.response";
 export default class UserResource {
   constructor(private readonly userService: UserService) {}
 
-  async register(request: Request, response: Response): Promise<Response> {
+  register = async (request: Request, response: Response): Promise<Response> => {
     try {
       const { email, password } = request.body;
       if (!email || !password) {
@@ -28,9 +28,9 @@ export default class UserResource {
       const errorResponse = ErrorResponse.fromError(error, request.path);
       return response.status(errorResponse.status).json(errorResponse);
     }
-  }
+  };
 
-  async login(request: Request, response: Response): Promise<Response> {
+  login = async (request: Request, response: Response): Promise<Response> => {
     try {
       const { email, password } = request.body;
       if (!email || !password) {
@@ -43,5 +43,5 @@ export default class UserResource {
       const errorResponse = ErrorResponse.fromError(error, request.path);
       return response.status(errorResponse.status).json(errorResponse);
     }
-  }
+  };
 }

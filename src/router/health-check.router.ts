@@ -8,9 +8,7 @@ export default class HealthCheckRouter implements Router {
   constructor(private readonly healthCheckResource: HealthCheckResource) {}
 
   get(): express.Router {
-    return express
-      .Router()
-      .get("/", this.healthCheckResource.getStatus.bind(this.healthCheckResource));
+    return express.Router().get("/", this.healthCheckResource.getStatus);
   }
 
   path(): string {

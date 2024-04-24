@@ -8,7 +8,7 @@ export default class TestRouter implements Router {
   constructor(private readonly testResource: TestResource) {}
 
   get(): express.Router {
-    return express.Router().get("/", this.testResource.getTest.bind(this.testResource));
+    return express.Router().get("/", this.testResource.getTest);
   }
 
   path(): string {
