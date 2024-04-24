@@ -11,6 +11,7 @@ import FirebaseSignRequest from "./request/firebase-sign.request";
 import { FirebaseUpdateProfileRequest } from "./request/firebase-update-profile.request";
 import FirebaseGetUserDataResponse from "./response/firebase-get-user-data.response";
 import FirebaseSignResponse from "./response/firebase-sign.response";
+import HttpError from "./response/http-error.response";
 
 @injectable()
 export default class FirebaseIntegration {
@@ -26,7 +27,7 @@ export default class FirebaseIntegration {
     );
   }
 
-  async signUp(email: string, password: string): Promise<FirebaseSignResponse | null> {
+  async signUp(email: string, password: string): Promise<FirebaseSignResponse> {
     try {
       const url = `${this.restApiBaseUrl}/accounts:signUp?key=${this.apiKey}`;
       const response = await fetch(url, {
@@ -36,11 +37,14 @@ export default class FirebaseIntegration {
         },
         body: toJson(new FirebaseSignRequest(email, password)),
       });
-      const responseData = (await response.json()) as FirebaseSignResponse;
-      return responseData;
+      if (response.status >= HttpStatus.OK && response.status <= HttpStatus.LAST_2XX) {
+        const responseData = (await response.json()) as FirebaseSignResponse;
+        return responseData;
+      }
+      throw await HttpError.fromResponse(response);
     } catch (error) {
       console.error("Error while signing up:", error);
-      return null;
+      throw error;
     }
   }
 
