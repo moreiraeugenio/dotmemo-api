@@ -1,7 +1,8 @@
 .env
 .env.example
-.gitignore
 .github
+.gitignore
 .nvmrc
 .prettierignore
+LICENSE
 build
