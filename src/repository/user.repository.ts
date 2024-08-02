@@ -13,7 +13,7 @@ import {
 } from "firebase/firestore";
 import { injectable } from "tsyringe";
 import FirebaseConfiguration from "../configuration/firebase.configuration";
-import User from "../model/user.model";
+import UserModel from "../model/user.model";
 
 @injectable()
 export default class UserRepository {
@@ -22,7 +22,7 @@ export default class UserRepository {
 
   constructor(firebaseConfiguration: FirebaseConfiguration) {
     this.firestore = firebaseConfiguration.getFirestore();
-    this.databaseName = firebaseConfiguration.getDatabaseName();
+    this.databaseName = firebaseConfiguration.getUsersDatabaseName();
   }
 
   async existsByEmail(email: string): Promise<boolean> {
@@ -31,22 +31,17 @@ export default class UserRepository {
   }
 
   private async queryByEmailSnapshot(email: string): Promise<QuerySnapshot> {
-    const documentQuery = query(
-      collection(this.firestore, this.databaseName),
-      where("email", "==", email),
-    );
+    const documentQuery = query(collection(this.firestore, this.databaseName), where("email", "==", email));
     return await getDocs(documentQuery);
   }
 
-  async createPartial(user: User): Promise<void> {
-    const documentReference = doc(this.firestore, this.databaseName, user.id).withConverter(
-      this.userConverter,
-    );
+  async createPartial(user: UserModel): Promise<void> {
+    const documentReference = doc(this.firestore, this.databaseName, user.id).withConverter(this.userConverter);
     await setDoc(documentReference, user);
   }
 
   private userConverter = {
-    toFirestore: (user: User) => {
+    toFirestore: (user: UserModel) => {
       return {
         id: user.id,
         email: user.email,
@@ -56,11 +51,8 @@ export default class UserRepository {
         createdAt: user.createdAt,
       };
     },
-    fromFirestore: (
-      queryDocumentSnapshot: QueryDocumentSnapshot,
-      snapshotOptions: SnapshotOptions,
-    ) => {
-      return queryDocumentSnapshot.data(snapshotOptions) as User;
+    fromFirestore: (queryDocumentSnapshot: QueryDocumentSnapshot, snapshotOptions: SnapshotOptions) => {
+      return queryDocumentSnapshot.data(snapshotOptions) as UserModel;
     },
   };
 

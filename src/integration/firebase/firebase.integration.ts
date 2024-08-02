@@ -3,7 +3,7 @@ import { HttpHeader } from "../../common/http-header.common";
 import { HttpMethod } from "../../common/http-method.common";
 import { HttpStatus } from "../../common/http-status.common";
 import { MediaType } from "../../common/media-type.common";
-import EnvironmentConfiguration from "../../configuration/dotenv.configuration";
+import EnvironmentConfiguration from "../../configuration/environment.configuration";
 import { toJson } from "../../util/json.util";
 import { FirebaseGetUserDataRequest } from "./request/firebase-get-user-data.request";
 import FirebaseRefreshTokenRequest from "./request/firebase-refresh-token.request";
@@ -22,9 +22,7 @@ export default class FirebaseIntegration {
   constructor(environmentConfiguration: EnvironmentConfiguration) {
     this.apiKey = environmentConfiguration.getStringValue("FIREBASE_API_KEY");
     this.restApiBaseUrl = environmentConfiguration.getStringValue("FIREBASE_REST_API_BASE_URL");
-    this.secureTokenBaseUrl = environmentConfiguration.getStringValue(
-      "FIREBASE_SECURE_TOKEN_BASE_URL",
-    );
+    this.secureTokenBaseUrl = environmentConfiguration.getStringValue("FIREBASE_SECURE_TOKEN_BASE_URL");
   }
 
   async signUp(email: string, password: string): Promise<FirebaseSignResponse> {
@@ -88,7 +86,7 @@ export default class FirebaseIntegration {
     }
   }
 
-  async getUserData(idToken: string): Promise<FirebaseGetUserDataResponse | null> {
+  async getUserData(idToken: string): Promise<FirebaseGetUserDataResponse> {
     try {
       const url = `${this.restApiBaseUrl}/accounts:lookup?key=${this.apiKey}`;
       const request = new FirebaseGetUserDataRequest(idToken);
@@ -99,11 +97,14 @@ export default class FirebaseIntegration {
         },
         body: toJson(request),
       });
-      const responseData = (await response.json()) as FirebaseGetUserDataResponse;
-      return responseData;
+      if (response.status >= HttpStatus.OK && response.status <= HttpStatus.LAST_2XX) {
+        const responseData = (await response.json()) as FirebaseGetUserDataResponse;
+        return responseData;
+      }
+      throw await HttpError.fromResponse(response);
     } catch (error) {
       console.error("Error while getting user data:", error);
-      return null;
+      throw error;
     }
   }
 

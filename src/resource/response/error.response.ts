@@ -23,18 +23,18 @@ export default class ErrorResponse {
   }
 
   static ofEmailAndPasswordAreRequired(path: string) {
-    return new ErrorResponse(
-      HttpStatus.BAD_REQUEST,
-      "Fields 'email' and 'password' are required",
-      path,
-    );
+    return new ErrorResponse(HttpStatus.BAD_REQUEST, "Fields 'email' and 'password' are required", path);
   }
 
   static ofEmailAlreadyRegistered(path: string) {
-    return new ErrorResponse(
-      HttpStatus.BAD_REQUEST,
-      "This email has already been registered",
-      path,
-    );
+    return new ErrorResponse(HttpStatus.BAD_REQUEST, "This email has already been registered", path);
+  }
+
+  static ofKeyAndValueAreRequired(path: string) {
+    return new ErrorResponse(HttpStatus.BAD_REQUEST, "Fields 'key' and 'value' are required", path);
+  }
+
+  static ofAuthorizationIsRequired(path: string) {
+    return new ErrorResponse(HttpStatus.UNAUTHORIZED, "You are not authorized", path);
   }
 }

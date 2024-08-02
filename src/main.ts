@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { container } from "tsyringe";
-import EnvironmentConfiguration from "./configuration/dotenv.configuration";
+import EnvironmentConfiguration from "./configuration/environment.configuration";
 import ExpressConfiguration from "./configuration/express.configuration";
 import FirebaseConfiguration from "./configuration/firebase.configuration";
 import RouteConfiguration from "./configuration/route.configuration";

@@ -1,7 +1,7 @@
 import { v4 as generateUuidv4 } from "uuid";
 import { hashPassword } from "../util/password.util";
 
-export default class User {
+export default class UserModel {
   private constructor(
     readonly id: string,
     readonly email: string,
@@ -11,18 +11,18 @@ export default class User {
     readonly createdAt: Date,
   ) {}
 
-  static withEmailAndPassword(email: string, password: string): User {
+  static withEmailAndPassword(email: string, password: string): UserModel {
     const now = new Date();
-    return new User(generateUuidv4(), email, password, true, now, now);
+    return new UserModel(generateUuidv4(), email, password, true, now, now);
   }
 
-  copyAsPermanent(): User {
+  copyAsPermanent(): UserModel {
     const now = new Date();
-    return new User(this.id, this.email, this.password, false, now, this.createdAt);
+    return new UserModel(this.id, this.email, this.password, false, now, this.createdAt);
   }
 
-  async withHashedPassword(): Promise<User> {
-    return new User(
+  async withHashedPassword(): Promise<UserModel> {
+    return new UserModel(
       this.id,
       this.email,
       await hashPassword(this.password),

@@ -1,11 +1,11 @@
 export default class FirebaseGetUserDataResponse {
-  constructor(private readonly users: FirebaseUserDataResponse[]) {}
+  constructor(readonly users: FirebaseUserDataResponse[]) {}
 }
 
 export class FirebaseUserDataResponse {
   constructor(
-    private readonly email: string,
-    private readonly emailVerified: boolean,
-    private readonly displayName: string,
+    readonly email: string,
+    readonly emailVerified: boolean,
+    readonly displayName: string,
   ) {}
 }

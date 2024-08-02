@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { injectable } from "tsyringe";
 import { HttpStatus } from "../common/http-status.common";
-import User from "../model/user.model";
+import UserModel from "../model/user.model";
 import UserAlreadyExistsError from "../service/error/user-already-exists.error";
 import UserService from "../service/user.service";
 import ErrorResponse from "./response/error.response";
@@ -18,7 +18,7 @@ export default class UserResource {
         const errorResponse = ErrorResponse.ofEmailAndPasswordAreRequired(request.path);
         return response.status(errorResponse.status).json(errorResponse);
       }
-      await this.userService.register(await User.withEmailAndPassword(email, password));
+      await this.userService.register(UserModel.withEmailAndPassword(email, password));
       return response.status(HttpStatus.CREATED).send();
     } catch (error) {
       if (error instanceof UserAlreadyExistsError) {

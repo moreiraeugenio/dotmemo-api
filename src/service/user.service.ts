@@ -1,6 +1,6 @@
 import { injectable } from "tsyringe";
 import FirebaseIntegration from "../integration/firebase/firebase.integration";
-import User from "../model/user.model";
+import UserModel from "../model/user.model";
 import UserRepository from "../repository/user.repository";
 import UserAlreadyExistsError from "./error/user-already-exists.error";
 
@@ -11,7 +11,7 @@ export default class UserService {
     private readonly firebaseIntegration: FirebaseIntegration,
   ) {}
 
-  async register(user: User): Promise<void> {
+  async register(user: UserModel): Promise<void> {
     const existsByEmail = await this.userRepository.existsByEmail(user.email);
     if (existsByEmail) {
       throw new UserAlreadyExistsError(user.email);
